@@ -15,9 +15,10 @@ class LCB_CatalogWebp_Helper_Data
     {
         $pathInfo = pathinfo($image);
         if (strtolower($pathInfo['extension']) !== 'webp') {
+            $fileName = $pathInfo['filename'];
             $imageFolder = Mage::getBaseDir('media') . DS . 'catalog' . DS . 'product';
             $webFolder = $this->getWebFolder();
-            $webpImage = $pathInfo['dirname'] . DS . $pathInfo['filename'] . '.webp';
+            $webpImage = $pathInfo['dirname'] . DS . $fileName . '.webp';
             $webpDir = $webFolder . $pathInfo['dirname'];
             $webpPath = $webFolder . $webpImage;
             if (file_exists($webpPath)) {
@@ -26,8 +27,12 @@ class LCB_CatalogWebp_Helper_Data
 
             $imagePath = $imageFolder . $image;
             if (file_exists($imagePath)) {
-                if (!file_exists($webpPath) && @mkdir($webpDir, 0777, true)) {
-                    exec("cwebp $imagePath -o $webpPath 2>&1", $output, $exitCode);
+                if (!file_exists($webpPath)) {
+                    if (!file_exists($webpDir)) {
+                        @mkdir($webpDir, 0777, true);
+                    }
+                    $command = "cwebp $imagePath -o $webpPath 2>&1";
+                    exec($command, $output, $exitCode);
                     if (!$exitCode) {
                         return $this->storagePrefix . $webpImage;
                     }
