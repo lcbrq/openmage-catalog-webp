@@ -2,7 +2,7 @@
 <config>
     <modules>
         <LCB_CatalogWebP>
-            <version>0.2.0</version>
+            <version>0.3.0</version>
         </LCB_CatalogWebP>
     </modules>
     <global>
@@ -16,6 +16,16 @@
                 <class>LCB_CatalogWebP_Model</class>
             </lcb_catalogwebp>
         </models>        
+        <events>
+            <catalog_product_save_after>
+                <observers>
+                    <lcb_catalog_webp_product_save_after>
+                        <class>lcb_catalogwebp/observer</class>
+                        <method>onCatalogProductSaveAfter</method>
+                    </lcb_catalog_webp_product_save_after>
+                </observers>
+            </catalog_product_save_after>
+        </events>
     </global>
     <frontend>
         <events>
@@ -27,14 +37,6 @@
                     </lcb_catalog_webp_product_load_after>
                 </observers>
             </catalog_product_load_after>
-            <catalog_product_save_after>
-                <observers>
-                    <lcb_catalog_webp_product_save_after>
-                        <class>lcb_catalogwebp/observer</class>
-                        <method>onCatalogProductSaveAfter</method>
-                    </lcb_catalog_webp_product_save_after>
-                </observers>
-            </catalog_product_save_after>
             <catalog_product_collection_load_after>
                 <observers>
                     <lcb_catalog_webp_product_collection_load_after>

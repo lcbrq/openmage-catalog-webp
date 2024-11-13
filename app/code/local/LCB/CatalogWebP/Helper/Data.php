@@ -44,21 +44,24 @@ class LCB_CatalogWebp_Helper_Data
     }
 
     /**
+     * @param Mage_Catalog_Model_Product
      * @return void
      */
-    public function refreshImages()
+    public function refreshImages($product)
     {
         foreach ([$product->getImage(), $product->getSmallImage()] as $image) {
             if ($image === 'no_selection') {
                 continue;
             }
             $pathInfo = pathinfo($image);
-            if (strtolower($pathInfo['extension']) === 'webp') {
-                $webpImage = $pathInfo['dirname'] . DS . $pathInfo['filename'] . '.webp';
-                $webpPath = $this->getWebFolder() . $webpImage;
+            $webpImage = $pathInfo['dirname'] . DS . $pathInfo['filename'] . '.webp';
+            $webpPath = $this->getWebFolder() . $webpImage;
+            if (file_exists($webpPath)) {
                 unlink($webpPath);
             }
         }
+
+        Mage::dispatchEvent('lcb_catalogwebp_images_refresh', array('product' => $product));
     }
 
     /**
